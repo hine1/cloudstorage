@@ -21,7 +21,10 @@ public class FileService {
         List<File> userFiles = fileMapper.getFiles(userId);
         if (userFiles.size() == 0) return true;
         else{
-            return !userFiles.contains(fileName);
+            for (File file : userFiles){
+                if (file.getFileName().equals(fileName))    return false;
+            }
+            return true;
         }
     }
 
@@ -37,7 +40,6 @@ public class FileService {
         file.setFileSize(multipartFile.getSize());
         file.setUserId(userId);
         file.setFileData(multipartFile.getBytes());
-        System.out.println(multipartFile.getContentType());
         return fileMapper.upload(file);
     }
 

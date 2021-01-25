@@ -38,10 +38,15 @@ public class FileController {
 
     }
     @GetMapping("/delete/{fileId}")
-    public String deleteFile(@PathVariable(value = "fileId") Integer fileId, Authentication authentication){
+    public String deleteFile(@PathVariable(value = "fileId")  Integer fileId, Model model, Authentication authentication){
         User user = this.userService.getUser(authentication.getName());
-        fileService.delete(fileId, user.getUserId());
-        return "redirect:/home";
+        try{
+            fileService.delete(fileId, user.getUserId());
+            model.addAttribute("deleteFileSuccess", true);
+            return "home";
+        }catch(Exception e){
+            return "error";
+        }
     }
 
     @PostMapping()
@@ -55,6 +60,10 @@ public class FileController {
         User user = this.userService.getUser(authentication.getName());
 
         if (this.fileService.isFileNameAvailable(fileUpload.getOriginalFilename(), user.getUserId())){
+            if(fileUpload.getSize()>128000000){
+                model.addAttribute("error", "The file is too large. Please do not exceed 128MB.");
+                return "result";
+            }
             try{
                 Integer fileId = this.fileService.upload(fileUpload, user.getUserId());
                 if (fileId==null){

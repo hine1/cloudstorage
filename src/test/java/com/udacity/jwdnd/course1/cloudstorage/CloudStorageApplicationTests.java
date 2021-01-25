@@ -44,6 +44,7 @@ class CloudStorageApplicationTests {
 
 
 	@Test
+	@Order(1)
 	public void getSignupAndLoginPage() {
 		driver.get(baseURL + "/login");
 		Assertions.assertEquals("Login", driver.getTitle());
@@ -53,6 +54,7 @@ class CloudStorageApplicationTests {
 
 
 	@Test
+	@Order(2)
 	public void testHomePageAccessibleBySignupLoginLogout(){
 		String username = "pzastoup";
 		String password = "whatabadpassword";
@@ -74,6 +76,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
+	@Order(3)
 	public void createViewEditAndDeleteNote() throws Exception{
 		//Signup and Login
 		String username = "pzastoup";
@@ -114,6 +117,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
+	@Order(4)
 	public void createViewEditAndDeleteCredential() throws Exception{
 		//Signup and Login
 		String username = "pzastoup";

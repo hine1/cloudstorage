@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/credentials")
@@ -27,10 +28,16 @@ public class CredentialController {
     }
 
     @GetMapping("/delete/{credentialId}")
-    public String deleteCredential(@PathVariable(value="credentialId") Integer credentialId, Authentication authentication){
+    public String deleteCredential(@PathVariable(value="credentialId") Integer credentialId, Model model, Authentication authentication){
         User user = this.userService.getUser(authentication.getName());
-        this.credentialService.delete(credentialId, user.getUserId());
-        return "redirect:/home";
+        try{
+            this.credentialService.delete(credentialId, user.getUserId());
+            model.addAttribute("deleteCredentialSuccess", true);
+            return "home";
+        }catch(Exception e){
+            return "error";
+        }
+
     }
     @PostMapping()
     public String uploadCredential(Credential credential, Authentication authentication, Model model){
@@ -41,21 +48,17 @@ public class CredentialController {
         String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), credential.getKey());
         credential.setPassword(encryptedPassword);
 
-        if (!credentialService.isCredentialUrlAvailable(credential.getUrl(), user.getUserId())){
-            model.addAttribute("error", "There is already a credential available for this url.");
-        }else{
-            if (credential.getCredentialId()!=null){
-                credentialService.update(credential);
-            }else {
-                int rowsAdded = credentialService.insert(credential);
-                if (rowsAdded < 0) {
-                    model.addAttribute("uploadError", "There was an error adding the credential. Please try again.");
-                    return "result";
-                }
-            }
 
-            model.addAttribute("success", true);
+        if (credential.getCredentialId()!=null){
+            credentialService.update(credential);
+        }else {
+            int rowsAdded = credentialService.insert(credential);
+            if (rowsAdded < 0) {
+                model.addAttribute("uploadError", "There was an error adding the credential. Please try again.");
+                return "result";
+            }
         }
+        model.addAttribute("success", true);
         return "result";
     }
 }

@@ -16,20 +16,9 @@ public class CredentialService {
         this.encryptionService = encryptionService;
     }
 
-    public boolean isCredentialUrlAvailable(String url, Integer userId){
-        List<Credential> userCredentials = credentialMapper.getCredentials(userId);
-        if (userCredentials.size()==0) return true;
-        else{
-            return !userCredentials.contains(url);
-        }
-    }
 
     public List<Credential> getUserCredentials(Integer userId){return credentialMapper.getCredentials(userId);}
 
-//    public String getCredentialPassword(Integer credentialId, Integer userId){
-//        Credential credential = credentialMapper.getCredential(credentialId, userId);
-//        return encryptionService.decryptValue(credential.getPassword(),);
-//    }
 
     public Integer insert(Credential credential){return credentialMapper.insert(credential);}
 

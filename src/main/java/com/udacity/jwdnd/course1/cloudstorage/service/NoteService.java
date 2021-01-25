@@ -13,14 +13,6 @@ public class NoteService {
 
     public NoteService(NoteMapper noteMapper){this.noteMapper = noteMapper;}
 
-    public boolean isNoteTitleAvailable(String noteTitle, Integer userId){
-        List<Note> userNotes = noteMapper.getNotes(userId);
-        if (userNotes.size() == 0) return true;
-        else{
-            return !userNotes.contains(noteTitle);
-        }
-    }
-
     public List<Note> getUserNotes(Integer userId){return noteMapper.getNotes(userId);}
 
     public Integer insert(Note note){
