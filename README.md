@@ -5,7 +5,7 @@ You have been hired by Super*Duper*Drive, which is a brand new company aiming to
 2. **Note Management:** Add/update/remove text notes
 3. **Password Management:** Save, edit, and delete website credentials.  
 
-#Project's Technology Focus:
+# Project's Technology Focus:
 - Spring Boot 
 - Thymeleaf
 - Application tests with Selenium
